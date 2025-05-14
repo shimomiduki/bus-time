@@ -1,0 +1,211 @@
+/* style.css */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 20px;
+    /* 全体の背景色を明るい #D6DCE4 に */
+    background-color: #D6DCE4; /* メインカラーを背景に */
+    color: #333; /* テキストの色は標準的なグレーで視認性確保 */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* 上部に寄せる */
+    min-height: 100vh;
+}
+
+.container {
+    background-color: #ffffff; /* コンテナの背景は白で清潔感を強調 */
+    padding: 30px;
+    border-radius: 10px;
+    /* シャドウを柔らかく */
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.03);
+    text-align: center;
+    max-width: 600px; /* 幅を少し広げる */
+    width: 100%;
+}
+
+h1 {
+    /* メインの見出し色を #D6DCE4 より少し濃いブルーグレーに */
+    color: #5a7a8a;
+    margin-bottom: 20px;
+}
+
+/* pタグ全体のデフォルト下マージンを調整 */
+p {
+    margin-bottom: 10px; /* 間隔を少し狭く */
+    color: #444; /* テキストの色を少し濃いめに維持 */
+}
+
+.select-container {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.select-container label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.select-container select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #b0c0cd; /* ボーダー色を #D6DCE4 より少し濃い色に */
+    border-radius: 5px;
+    font-size: 1em;
+    /* デフォルトのフォーカス時のアウトラインを消すか調整 */
+    outline: none; /* デフォルトのアウトラインを消す */
+    transition: border-color 0.3s ease; /* ボーダー色の変化を滑らかに */
+}
+
+/* プルダウンがフォーカスされたときのスタイル */
+.select-container select:focus {
+    /* フォーカス時のボーダーの色を濃いブルーグレーに */
+    border-color: #5a7a8a;
+    /* 必要であれば、フォーカス時のアウトラインの色を指定することも可能 */
+    /* outline: 2px solid #5a7a8a; */
+}
+
+
+button {
+    /* ボタンの色を #D6DCE4 より濃いブルーグレーに */
+    background-color: #5a7a8a;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    font-size: 1em;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 20px;
+}
+
+button:hover {
+    /* ホバー時の色をさらに濃く */
+    background-color: #4a6a7a;
+}
+
+#results {
+    margin-top: 20px;
+    text-align: left;
+}
+
+#minutesUntilNextBus {
+    /* 結果表示エリアの背景色を明るくし、テキスト色を濃くして視認性を向上 */
+    background-color: #e8f0f4; /* 明るめのブルーグレー */
+    border-color: #c8d0d6; /* ボーダー色も調整 */
+    color: #333; /* テキスト色を標準的なグレーに */
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px; /* 時刻表との間にスペース */
+    font-size: 1.2em; /* 少し大きめのフォント */
+    font-weight: bold;
+    text-align: center; /* 中央寄せ */
+}
+
+/* #minutesUntilNextBus内のpタグの下マージンを調整して行間を詰める */
+#minutesUntilNextBus p {
+    margin-bottom: 2px; /* ここで下マージンをさらに小さくします */
+}
+
+/* 路線名が表示される3番目のpタグの上マージンを調整して行間を詰める */
+#minutesUntilNextBus p:nth-child(3) {
+    margin-top: 0px; /* 上マージンを小さくします */
+    margin-bottom: 2px; /* 下マージンも調整 */
+}
+
+
+#minutesUntilNextBus p:last-child {
+    margin-bottom: 0; /* 最後のpタグの下マージンは不要 */
+}
+
+
+#minutesUntilNextBus strong {
+     color: #2F7D95; /* 強調テキストをさらに濃い色に */
+}
+
+
+#timetableDisplay h2 {
+    color: #5a7a8a; /* 時刻表の見出し色をメインカラーに */
+    margin-top: 20px;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #c8d0d6; /* ボーダー色を #D6DCE4 より少し濃い色に */
+    padding-bottom: 5px;
+}
+
+.timetable-section {
+    margin-bottom: 20px;
+    border: 1px solid #b0c0cd; /* ボーダー色を #D6DCE4 より少し濃い色に */
+    border-radius: 5px;
+    padding: 15px;
+    background-color: #f0f4f6; /* セクション背景色を明るめのブルーグレーに維持 */
+}
+
+.timetable-section h3 {
+    color: #4a6a7a; /* 曜日の見出し色を調整 */
+    margin-top: 0;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #c8d0d6; /* ボーダー色を #D6DCE4 より少し濃い色に */
+    padding-bottom: 5px;
+}
+
+.route-timetable {
+    margin-bottom: 15px; /* 路線ごとの間隔 */
+}
+
+.route-timetable h4 {
+    color: #5a7a8a; /* 路線名の見出し色をメインカラーに */
+    margin-top: 0;
+    margin-bottom: 8px;
+    font-size: 1em;
+    border-bottom: 1px dashed #b0c0cd; /* 点線の下線色を #D6DCE4 より少し濃い色に */
+    padding-bottom: 3px;
+}
+
+
+.timetable-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex; /* 横並びにする */
+    flex-wrap: wrap; /* 折り返す */
+    gap: 10px; /* 要素間の隙間 */
+}
+
+.timetable-list li {
+    background-color: #ffffff; /* リストアイテムの背景は白 */
+    border: 1px solid #b0c0cd; /* ボーダー色を #D6DCE4 より少し濃い色に */
+    border-radius: 3px;
+    padding: 5px 10px;
+    font-size: 0.9em;
+}
+
+/* 曜日ごとの表示/非表示を制御 */
+.timetable-section.hidden {
+    display: none;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 600px) {
+    .container {
+        padding: 20px;
+    }
+
+    button {
+        padding: 10px 20px;
+        font-size: 0.9em;
+    }
+
+    .select-container select {
+        font-size: 0.9em;
+    }
+
+    #minutesUntilNextBus {
+        font-size: 1em;
+    }
+
+    .timetable-list li {
+        font-size: 0.8em;
+        padding: 4px 8px;
+    }
+}
