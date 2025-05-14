@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>バス時刻検索アプリ</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <div class="container">
+        <h1>バス時刻検索</h1>
+
+        <div class="select-container">
+            <label for="busStopSelect">バス停を選択:</label>
+            <select id="busStopSelect">
+                <option value="聖路加国際病院（中央区役所行、八重洲口行）">聖路加国際病院（中央区役所行、八重洲口行）</option>
+                <option value="新富二丁目（北循環）">新富二丁目（北循環）</option>
+                <option value="湊三丁目（新川方面）">湊三丁目（新川方面）</option>
+            </select>
+        </div>
+
+        <button id="searchButton">次のバスを検索</button>
+
+        <div id="results">
+            <div id="minutesUntilNextBus" class="bus-info">
+                </div>
+
+            <div id="timetableDisplay">
+                <h2>時刻表</h2>
+                <div id="weekdayTimetable" class="timetable-section hidden">
+                    <h3>平日</h3>
+                    <div class="route-timetable" id="weekdayTimetableEdo">
+                        <h4>江戸バス</h4>
+                        <ul class="timetable-list"></ul>
+                    </div>
+                    <div class="route-timetable" id="weekdayTimetableTo">
+                         <h4>都バス</h4>
+                        <ul class="timetable-list"></ul>
+                    </div>
+                </div>
+                <div id="saturdayTimetable" class="timetable-section hidden">
+                    <h3>土曜日</h3>
+                     <div class="route-timetable" id="saturdayTimetableEdo">
+                        <h4>江戸バス</h4>
+                        <ul class="timetable-list"></ul>
+                    </div>
+                    <div class="route-timetable" id="saturdayTimetableTo">
+                         <h4>都バス</h4>
+                        <ul class="timetable-list"></ul>
+                    </div>
+                </div>
+                <div id="holidayTimetable" class="timetable-section hidden">
+                    <h3>日曜・祝日</h3>
+                     <div class="route-timetable" id="holidayTimetableEdo">
+                        <h4>江戸バス</h4>
+                        <ul class="timetable-list"></ul>
+                    </div>
+                    <div class="route-timetable" id="holidayTimetableTo">
+                         <h4>都バス</h4>
+                        <ul class="timetable-list"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
