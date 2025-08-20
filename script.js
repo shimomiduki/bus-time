@@ -37,7 +37,7 @@ const rawTimetable = {
             ]
         },
         toBus: { // 都バスの時刻表
-             weekday: [
+            weekday: [
                 // 平日時刻 (都バス)
                 "06:53", "07:13", "07:34", "07:54", "08:12", "08:30", "08:48", "09:10",
                 "09:33", "09:57", "10:26", "10:54", "11:33", "12:12", "12:45", "13:09",
@@ -65,8 +65,8 @@ const rawTimetable = {
         }
     },
     "新富二丁目（北循環）": {
-         edoBus: { // 
-             weekday: [
+        edoBus: { // 
+            weekday: [
                 "07:08", "07:28", "07:48", "08:08", "08:28", "08:48", "09:08", "09:28",
                 "09:48", "10:08", "10:28", "10:48", "11:08", "11:28", "11:48", "12:08",
                 "12:28", "12:48", "13:08", "13:28", "13:48", "14:08", "14:28", "14:48",
@@ -90,8 +90,8 @@ const rawTimetable = {
         }
     },
     "湊三丁目（新川方面）": { // 
-         edoBus: { // 江戸バス（南循環）の時刻表
-             weekday: [
+        edoBus: { // 江戸バス（南循環）の時刻表
+            weekday: [
                 // 平日時刻 (江戸バス)
                 "07:09", "07:29", "07:49", "08:09", "08:29", "08:49", "09:09", "09:29",
                 "09:49", "10:09", "10:29", "10:49", "11:09", "11:29", "11:49", "12:09",
@@ -155,7 +155,7 @@ function timeStringToMinutes(timeString) {
         if (timeString.length === 4) {
             timeString = timeString.substring(0, 2) + ':' + timeString.substring(2, 4);
         } else if (timeString.length === 3) { // 例: 715 -> 07:15
-             timeString = '0' + timeString.substring(0, 1) + ':' + timeString.substring(1, 3);
+            timeString = '0' + timeString.substring(0, 1) + ':' + timeString.substring(1, 3);
         }
     }
     const [hours, minutes] = timeString.split(':').map(Number);
@@ -210,7 +210,7 @@ function getCurrentDayType() {
     if (dayOfWeek === 6) {
         return 'saturday'; // 土曜日
     } else if (dayOfWeek === 0) {
-         // 簡単のため、日曜日は祝日扱いとします
+        // 簡単のため、日曜日は祝日扱いとします
         return 'holiday'; // 日曜日・祝日
     } else {
         return 'weekday'; // 平日 (月〜金)
@@ -230,29 +230,63 @@ function searchNextBus() {
     // 現在時刻を「0時0分からの合計分数」に変換
     const currentMinutesTotal = now.getHours() * 60 + now.getMinutes();
 
-    let nextBusTime = null; // 次に早いバスの時刻（分単位）
-    let nextBusRoute = ''; // 次に早いバスの路線 ('江戸バス' または '都バス')
-
-    // 江戸バスの次の便を検索
+    // 江戸バスと都バス、それぞれの次の便を検索
     const nextEdoBusTime = busStopTimetable.edoBus ? findNextDeparture(busStopTimetable.edoBus[currentDayType], currentMinutesTotal) : null;
+    const nextToBusTime = busStopTimetable.toBus ? findNextDeparture(busStopTimetable.toBus[currentDayType], currentMinutesTotal) : null;
 
-    // 都バスの次の便を検索 (都バスがあるバス停のみ)
-    let nextToBusTime = null;
-    if (busStopTimetable.toBus) {
-        nextToBusTime = findNextDeparture(busStopTimetable.toBus[currentDayType], currentMinutesTotal);
+    const upcomingBuses = [];
+    if (nextEdoBusTime !== null) {
+        upcomingBuses.push({ time: nextEdoBusTime, route: '江戸バス' });
+    }
+    if (nextToBusTime !== null) {
+        upcomingBuses.push({ time: nextToBusTime, route: '都バス' });
     }
 
-    // 次に早いバスを判定
-    if (nextEdoBusTime !== null && (nextToBusTime === null || nextEdoBusTime <= nextToBusTime)) {
-        nextBusTime = nextEdoBusTime;
-        nextBusRoute = '江戸バス';
-    } else if (nextToBusTime !== null) {
-        nextBusTime = nextToBusTime;
-        nextBusRoute = '都バス';
-    }
+    // 時間が早い順にソート
+    upcomingBuses.sort((a, b) => a.time - b.time);
 
     // 結果表示エリアをクリア
     minutesUntilNextBusDiv.innerHTML = '';
+
+    // バス停名を表示
+    let resultsHTML = `<p class="bus-stop-name"><strong>${selectedBusStop}</strong></p>`;
+
+    if (upcomingBuses.length > 0) {
+        // 見つかったバスの情報をHTMLとして生成
+        upcomingBuses.forEach((bus, index) => {
+            const minutesUntilNextBus = bus.time - currentMinutesTotal;
+            let timeUntilNextBusText = '';
+            if (minutesUntilNextBus >= 60) {
+                const hours = Math.floor(minutesUntilNextBus / 60);
+                const minutes = minutesUntilNextBus % 60;
+                timeUntilNextBusText = `${hours}時間${minutes}分後`;
+            } else {
+                timeUntilNextBusText = `${minutesUntilNextBus}分後`;
+            }
+            const departureTimeText = `${Math.floor(bus.time / 60).toString().padStart(2, '0')}時${(bus.time % 60).toString().padStart(2, '0')}分`;
+            
+            // 最初に到着するバスかどうかでクラスを分ける
+            const busClass = (index === 0) ? 'primary' : 'secondary';
+            const label = (index === 0) ? '次に早いバス' : 'もう一方のバス';
+
+            resultsHTML += `
+                <div class="next-bus ${busClass}">
+                    <p>${label} (${bus.route}): <strong>約 ${timeUntilNextBusText}</strong></p>
+                    <p class="departure-time">出発予定: ${departureTimeText}</p>
+                </div>
+            `;
+        });
+        minutesUntilNextBusDiv.innerHTML = resultsHTML;
+
+    } else {
+        // 本日の運行が終了している場合
+        minutesUntilNextBusDiv.innerHTML = `
+            <p class="bus-stop-name"><strong>${selectedBusStop}</strong></p>
+            <p>本日のバスは終了しました。</p>
+        `;
+    }
+
+    // --- 時刻表表示ロジック (変更なし) ---
     // 全ての時刻表リストをクリア
     document.querySelectorAll('.timetable-list').forEach(ul => ul.innerHTML = '');
 
@@ -265,55 +299,23 @@ function searchNextBus() {
 
     // 該当曜日の江戸バス時刻表を表示
     if (rawBusStopTimetable.edoBus && rawBusStopTimetable.edoBus[currentDayType]) { // 該当曜日のデータが存在するか確認
-         displayTimetableList(rawBusStopTimetable.edoBus[currentDayType], document.getElementById(`${currentDayType}TimetableEdo`).querySelector('.timetable-list'));
-         document.getElementById(`${currentDayType}TimetableEdo`).classList.remove('hidden'); // 江戸バスのセクションを表示
+        displayTimetableList(rawBusStopTimetable.edoBus[currentDayType], document.getElementById(`${currentDayType}TimetableEdo`).querySelector('.timetable-list'));
+        document.getElementById(`${currentDayType}TimetableEdo`).classList.remove('hidden'); // 江戸バスのセクションを表示
     } else {
-         // データがない場合はセクションを非表示にする
-         document.getElementById(`${currentDayType}TimetableEdo`).classList.add('hidden');
+        // データがない場合はセクションを非表示にする
+        document.getElementById(`${currentDayType}TimetableEdo`).classList.add('hidden');
     }
-
 
     // 該当曜日の都バス時刻表を表示 (都バスがあるバス停のみ)
     if (rawBusStopTimetable.toBus && rawBusStopTimetable.toBus[currentDayType]) { // 該当曜日のデータが存在するか確認
-         document.getElementById(`${currentDayType}TimetableTo`).classList.remove('hidden'); // 都バスのセクションを表示
-         displayTimetableList(rawBusStopTimetable.toBus[currentDayType], document.getElementById(`${currentDayType}TimetableTo`).querySelector('.timetable-list'));
+        document.getElementById(`${currentDayType}TimetableTo`).classList.remove('hidden'); // 都バスのセクションを表示
+        displayTimetableList(rawBusStopTimetable.toBus[currentDayType], document.getElementById(`${currentDayType}TimetableTo`).querySelector('.timetable-list'));
     } else {
-         // 都バスがないバス停の場合はセクションを非表示にする
-         document.getElementById(`${currentDayType}TimetableTo`).classList.add('hidden');
-    }
-
-
-    // 次のバスが見つかった場合
-    if (nextBusTime !== null) {
-        // 次のバスまでの残り時間を分で計算
-        const minutesUntilNextBus = nextBusTime - currentMinutesTotal;
-
-        // 残り時間を時間と分に変換して表示形式を決定
-        let timeUntilNextBusText = '';
-        if (minutesUntilNextBus >= 60) {
-            const hours = Math.floor(minutesUntilNextBus / 60);
-            const minutes = minutesUntilNextBus % 60;
-            timeUntilNextBusText = `${hours}時間${minutes}分後`;
-        } else {
-            timeUntilNextBusText = `${minutesUntilNextBus}分後`;
-        }
-
-
-        // 「あと何分後」を表示
-        minutesUntilNextBusDiv.innerHTML = `
-            <p><strong>${selectedBusStop}</strong></p>
-            <p>次に早いバス: <strong>約 ${timeUntilNextBusText}</strong> です。</p>
-            <p>（${nextBusRoute}）</p>
-            <p>出発予定時刻: ${Math.floor(nextBusTime / 60).toString().padStart(2, '0')}時${(nextBusTime % 60).toString().padStart(2, '0')}分</p>
-        `;
-    } else {
-        // 本日の運行が終了している場合
-         minutesUntilNextBusDiv.innerHTML = `
-            <p><strong>${selectedBusStop}</strong></p>
-            <p>本日のバスは終了しました。</p>
-        `;
+        // 都バスがないバス停の場合はセクションを非表示にする
+        document.getElementById(`${currentDayType}TimetableTo`).classList.add('hidden');
     }
 }
+
 
 // --- 現在時刻より後の最初の出発時刻を見つけるヘルパー関数 ---
 // timetable: 時刻の配列 (分単位)
