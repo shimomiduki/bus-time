@@ -93,35 +93,60 @@ button:hover {
 #minutesUntilNextBus {
     /* 結果表示エリアの背景色を明るくし、テキスト色を濃くして視認性を向上 */
     background-color: #e8f0f4; /* 明るめのブルーグレー */
-    border-color: #c8d0d6; /* ボーダー色も調整 */
+    border: 1px solid #c8d0d6; /* ボーダー色も調整 */
     color: #333; /* テキスト色を標準的なグレーに */
     padding: 15px;
     border-radius: 5px;
     margin-bottom: 20px; /* 時刻表との間にスペース */
-    font-size: 1.2em; /* 少し大きめのフォント */
-    font-weight: bold;
     text-align: center; /* 中央寄せ */
 }
 
-/* #minutesUntilNextBus内のpタグの下マージンを調整して行間を詰める */
-#minutesUntilNextBus p {
-    margin-bottom: 2px; /* ここで下マージンをさらに小さくします */
-}
-
-/* 路線名が表示される3番目のpタグの上マージンを調整して行間を詰める */
-#minutesUntilNextBus p:nth-child(3) {
-    margin-top: 0px; /* 上マージンを小さくします */
-    margin-bottom: 2px; /* 下マージンも調整 */
-}
-
-
-#minutesUntilNextBus p:last-child {
-    margin-bottom: 0; /* 最後のpタグの下マージンは不要 */
+.bus-stop-name {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 15px !important;
 }
 
 
 #minutesUntilNextBus strong {
-     color: #2F7D95; /* 強調テキストをさらに濃い色に */
+    color: #2F7D95; /* 強調テキストをさらに濃い色に */
+}
+
+.next-bus {
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.next-bus.primary {
+    background-color: #ffffff; /* 白背景で目立たせる */
+    border: 1px solid #a8b6c2;
+}
+
+.next-bus.primary p {
+    font-size: 1.1em;
+    font-weight: bold;
+    margin: 5px 0;
+}
+
+.next-bus.secondary {
+    background-color: transparent; /* 背景は親要素と同じ */
+    border-top: 1px dashed #b0c0cd; /* 上に区切り線 */
+    padding-top: 15px;
+    margin-top: 15px;
+}
+
+.next-bus.secondary p {
+    font-size: 0.9em;
+    color: #555; /* 少し薄い色 */
+    margin: 4px 0;
+}
+
+/* 出発予定時刻のテキストスタイル */
+.departure-time {
+    font-size: 0.9em !important; /* !importantで強制的にサイズを統一 */
+    font-weight: normal !important; /* 太字にしない */
+    color: #666;
 }
 
 
@@ -178,7 +203,18 @@ button:hover {
     border-radius: 3px;
     padding: 5px 10px;
     font-size: 0.9em;
+    transition: all 0.3s ease; /* アニメーションを滑らかに */
 }
+
+/* ★ 新しく追加したハイライト用のスタイル ★ */
+.timetable-list li.highlight-next-bus {
+    background-color: #5a7a8a; /* ボタンと同じテーマカラー */
+    color: white; /* テキストは白 */
+    font-weight: bold;
+    border-color: #4a6a7a; /* 少し濃いボーダー */
+    transform: scale(1.05); /* 少しだけ大きくして目立たせる */
+}
+
 
 /* 曜日ごとの表示/非表示を制御 */
 .timetable-section.hidden {
