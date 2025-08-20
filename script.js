@@ -188,13 +188,6 @@ const searchButton = document.getElementById('searchButton');
 const busStopSelect = document.getElementById('busStopSelect');
 const minutesUntilNextBusDiv = document.getElementById('minutesUntilNextBus');
 const timetableDisplayDiv = document.getElementById('timetableDisplay');
-// 各曜日の各路線リスト要素を取得
-const weekdayTimetableListEdo = document.getElementById('weekdayTimetableEdo').querySelector('.timetable-list');
-const weekdayTimetableListTo = document.getElementById('weekdayTimetableTo').querySelector('.timetable-list');
-const saturdayTimetableListEdo = document.getElementById('saturdayTimetableEdo').querySelector('.timetable-list');
-const saturdayTimetableListTo = document.getElementById('saturdayTimetableTo').querySelector('.timetable-list');
-const holidayTimetableListEdo = document.getElementById('holidayTimetableEdo').querySelector('.timetable-list');
-const holidayTimetableListTo = document.getElementById('holidayTimetableTo').querySelector('.timetable-list');
 
 // --- 検索ボタンにイベントリスナーを設定 ---
 searchButton.addEventListener('click', searchNextBus);
@@ -202,6 +195,11 @@ searchButton.addEventListener('click', searchNextBus);
 // --- 現在の曜日を取得する関数 ---
 // 戻り値: 'weekday', 'saturday', 'holiday' のいずれか
 function getCurrentDayType() {
+    // ▼▼▼ 動作確認のための変更箇所 ▼▼▼
+    // 曜日を固定したい場合は、下の行のコメントを解除して 'weekday', 'saturday', 'holiday' のいずれかを指定してください。
+    // return 'weekday'; 
+    // ▲▲▲ ここまで ▲▲▲
+
     const today = new Date();
     const dayOfWeek = today.getDay(); // 0:日曜日, 1:月曜日, ..., 6:土曜日
 
@@ -220,13 +218,19 @@ function getCurrentDayType() {
 // --- 次のバスを検索して表示する関数 ---
 function searchNextBus() {
     const selectedBusStop = busStopSelect.value; // 選択されたバス停
+    
+    // ▼▼▼ 動作確認のための変更箇所 ▼▼▼
+    // 現在時刻を取得する代わりに、固定の時刻を設定します。
+    const now = new Date(); // ← 本来のコードはこちらです。確認が終わったら下の行を消して、こちらのコメントを解除してください。
+    //const now = new Date('2025-08-20T08:00:00'); // テスト用に時間を平日の午前8時に固定
+    // ▲▲▲ ここまで ▲▲▲
+
     const currentDayType = getCurrentDayType(); // 現在の曜日タイプ
 
     // 選択されたバス停の時刻表データを取得
     const busStopTimetable = calculatedTimetable[selectedBusStop];
     const rawBusStopTimetable = rawTimetable[selectedBusStop]; // 表示用
 
-    const now = new Date();
     // 現在時刻を「0時0分からの合計分数」に変換
     const currentMinutesTotal = now.getHours() * 60 + now.getMinutes();
 
@@ -286,7 +290,7 @@ function searchNextBus() {
         `;
     }
 
-    // --- 時刻表表示ロジック (変更なし) ---
+    // --- 時刻表表示ロジック ---
     // 全ての時刻表リストをクリア
     document.querySelectorAll('.timetable-list').forEach(ul => ul.innerHTML = '');
 
@@ -298,38 +302,34 @@ function searchNextBus() {
     document.getElementById(currentDaySectionId).classList.remove('hidden');
 
     // 該当曜日の江戸バス時刻表を表示
-    if (rawBusStopTimetable.edoBus && rawBusStopTimetable.edoBus[currentDayType]) { // 該当曜日のデータが存在するか確認
-        displayTimetableList(rawBusStopTimetable.edoBus[currentDayType], document.getElementById(`${currentDayType}TimetableEdo`).querySelector('.timetable-list'));
-        document.getElementById(`${currentDayType}TimetableEdo`).classList.remove('hidden'); // 江戸バスのセクションを表示
+    if (rawBusStopTimetable.edoBus && rawBusStopTimetable.edoBus[currentDayType]) {
+        const listElement = document.getElementById(`${currentDayType}TimetableEdo`).querySelector('.timetable-list');
+        displayTimetableList(rawBusStopTimetable.edoBus[currentDayType], listElement);
+        highlightNextBusInList(listElement, nextEdoBusTime); // ハイライト処理を追加
+        document.getElementById(`${currentDayType}TimetableEdo`).classList.remove('hidden');
     } else {
-        // データがない場合はセクションを非表示にする
         document.getElementById(`${currentDayType}TimetableEdo`).classList.add('hidden');
     }
 
     // 該当曜日の都バス時刻表を表示 (都バスがあるバス停のみ)
-    if (rawBusStopTimetable.toBus && rawBusStopTimetable.toBus[currentDayType]) { // 該当曜日のデータが存在するか確認
-        document.getElementById(`${currentDayType}TimetableTo`).classList.remove('hidden'); // 都バスのセクションを表示
-        displayTimetableList(rawBusStopTimetable.toBus[currentDayType], document.getElementById(`${currentDayType}TimetableTo`).querySelector('.timetable-list'));
+    if (rawBusStopTimetable.toBus && rawBusStopTimetable.toBus[currentDayType]) {
+        const listElement = document.getElementById(`${currentDayType}TimetableTo`).querySelector('.timetable-list');
+        displayTimetableList(rawBusStopTimetable.toBus[currentDayType], listElement);
+        highlightNextBusInList(listElement, nextToBusTime); // ハイライト処理を追加
+        document.getElementById(`${currentDayType}TimetableTo`).classList.remove('hidden');
     } else {
-        // 都バスがないバス停の場合はセクションを非表示にする
         document.getElementById(`${currentDayType}TimetableTo`).classList.add('hidden');
     }
 }
 
 
 // --- 現在時刻より後の最初の出発時刻を見つけるヘルパー関数 ---
-// timetable: 時刻の配列 (分単位)
-// currentMinutesTotal: 現在時刻 (分単位)
-// 戻り値: 次の出発時刻 (分単位) または null (本日の運行終了)
 function findNextDeparture(timetable, currentMinutesTotal) {
-    // 時刻表を順番に見ていく
     for (let i = 0; i < timetable.length; i++) {
-        // 現在時刻以上の時刻が見つかったら、それが次の出発時刻
         if (timetable[i] >= currentMinutesTotal) {
             return timetable[i];
         }
     }
-    // 時刻表の最後まで見ても見つからなかった場合、本日の運行は終了
     return null;
 }
 
@@ -342,21 +342,34 @@ function displayTimetableList(timetable, ulElement) {
     ulElement.innerHTML = timetable.map(time => `<li>${time}</li>`).join('');
 }
 
+// --- ★ 新しく追加したハイライト用の関数 ★ ---
+function highlightNextBusInList(listElement, nextBusTimeInMinutes) {
+    if (!listElement || nextBusTimeInMinutes === null) return;
+
+    // 分単位の時刻を "HH:MM" 形式の文字列に変換
+    const hours = Math.floor(nextBusTimeInMinutes / 60);
+    const minutes = nextBusTimeInMinutes % 60;
+    const timeString = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+
+    // 対応するリストアイテムを探してハイライト用クラスを付与
+    const listItems = listElement.querySelectorAll('li');
+    for (const item of listItems) {
+        if (item.textContent === timeString) {
+            item.classList.add('highlight-next-bus');
+            break; // 一致するものを見つけたらループを抜ける
+        }
+    }
+}
+
 
 // --- PWA (Progressive Web App) 関連の処理 ---
-// Service Workerを登録します。
-// Service Workerはバックグラウンドで動作し、オフラインでのキャッシュなどを担当します。
-// 注意: Service Workerは 'file://' から開いたローカルファイルでは動作しません。
-//       ウェブサーバー経由でアクセスする必要があります。
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js') // sw.js のパスを指定
+        navigator.serviceWorker.register('/sw.js')
             .then(registration => {
-                // 登録成功
                 console.log('Service Worker registered with scope:', registration.scope);
             })
             .catch(error => {
-                // 登録失敗
                 console.log('Service Worker registration failed:', error);
             });
     });
