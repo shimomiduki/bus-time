@@ -21,23 +21,21 @@ const rawTimetable = {
             ],
             saturday: [
                 // 土曜日時刻 (江戸バス)
-                "08:20", "08:40", "09:00", "09:20", "09:40", "10:00", "10:20", "10:40",
-                "11:00", "11:20", "11:40", "12:00", "12:20", "12:40", "13:00", "13:20",
-                "13:40", "14:00", "14:20", "14:40", "15:00", "15:20", "15:40", "16:00",
-                "16:20", "16:40", "17:00", "17:20", "17:40", "18:00", "18:20", "18:40",
-                "19:00", "19:20", "19:40", "20:00"
+                "09:23", "09:53", "10:23", "10:53", "11:23", "11:53", 
+                "12:23", "12:53", "13:23", "13:53", "14:23", "14:53",
+		"15:23", "15:53", "16:23", "16:53", "17:23", "17:53",
+		"18:23", "18:53", "19:23", "19:53",
             ],
             holiday: [
                 // 日曜・祝日時刻 (江戸バス)
-                "09:00", "09:20", "09:40", "10:00", "10:20", "10:40", "11:00", "11:20",
-                "11:40", "12:00", "12:20", "12:40", "13:00", "13:20", "13:40", "14:00",
-                "14:20", "14:40", "15:00", "15:20", "15:40", "16:00", "16:20", "16:40",
-                "17:00", "17:20", "17:40", "18:00", "18:20", "18:40", "19:00", "19:20",
-                "19:40", "20:00"
+                "09:23", "09:53", "10:23", "10:53", "11:23", "11:53", 
+                "12:23", "12:53", "13:23", "13:53", "14:23", "14:53",
+		"15:23", "15:53", "16:23", "16:53", "17:23", "17:53",
+		"18:23", "18:53", "19:23", "19:53",
             ]
         },
         toBus: { // 都バスの時刻表
-            weekday: [
+             weekday: [
                 // 平日時刻 (都バス)
                 "06:53", "07:13", "07:34", "07:54", "08:12", "08:30", "08:48", "09:10",
                 "09:33", "09:57", "10:26", "10:54", "11:33", "12:12", "12:45", "13:09",
@@ -65,8 +63,8 @@ const rawTimetable = {
         }
     },
     "新富二丁目（北循環）": {
-        edoBus: { // 
-            weekday: [
+         edoBus: { // 
+             weekday: [
                 "07:08", "07:28", "07:48", "08:08", "08:28", "08:48", "09:08", "09:28",
                 "09:48", "10:08", "10:28", "10:48", "11:08", "11:28", "11:48", "12:08",
                 "12:28", "12:48", "13:08", "13:28", "13:48", "14:08", "14:28", "14:48",
@@ -74,24 +72,20 @@ const rawTimetable = {
                 "17:48", "18:08", "18:28", "18:48", "19:08"
             ],
             saturday: [
-                "07:23", "07:43", "08:03", "08:23", "08:43", "09:03", "09:23", "09:43",
-                "10:03", "10:23", "10:43", "11:03", "11:23", "11:43", "12:03", "12:23",
-                "12:43", "13:03", "13:23", "13:43", "14:03", "14:23", "14:43", "15:03",
-                "15:23", "15:43", "16:03", "16:23", "16:43", "17:03", "17:23", "17:43",
-                "18:03", "18:23", "18:43", "19:03"
+                "08:13", "08:43", "09:13", "09:43", "10:13", "10:43", "11:13", "11:43",
+                "12:13", "12:43", "13:13", "13:43", "14:13", "14:43", "15:13", "15:43",
+                "16:13", "16:43", "17:13", "17:43", "18:13", "18:43"
             ],
             holiday: [
-                "08:03", "08:23", "08:43", "09:03", "09:23", "09:43", "10:03", "10:23",
-                "10:43", "11:03", "11:23", "11:43", "12:03", "12:23", "12:43", "13:03",
-                "13:23", "13:43", "14:03", "14:23", "14:43", "15:03", "15:23", "15:43",
-                "16:03", "16:23", "16:43", "17:03", "17:23", "17:43", "18:03", "18:23",
-                "18:43", "19:03"
+                "08:13", "08:43", "09:13", "09:43", "10:13", "10:43", "11:13", "11:43",
+                "12:13", "12:43", "13:13", "13:43", "14:13", "14:43", "15:13", "15:43",
+                "16:13", "16:43", "17:13", "17:43", "18:13", "18:43"
             ]
         }
     },
     "湊三丁目（新川方面）": { // 
-        edoBus: { // 江戸バス（南循環）の時刻表
-            weekday: [
+         edoBus: { // 江戸バス（南循環）の時刻表
+             weekday: [
                 // 平日時刻 (江戸バス)
                 "07:09", "07:29", "07:49", "08:09", "08:29", "08:49", "09:09", "09:29",
                 "09:49", "10:09", "10:29", "10:49", "11:09", "11:29", "11:49", "12:09",
@@ -101,19 +95,17 @@ const rawTimetable = {
             ],
             saturday: [
                 // 土曜日時刻 (江戸バス)
-                "07:37", "07:57", "08:17", "08:37", "08:57", "09:17", "09:37", "09:57",
-                "10:17", "10:37", "10:57", "11:17", "11:37", "11:57", "12:17", "12:37",
-                "12:57", "13:17", "13:37", "13:57", "14:17", "14:37", "14:57", "15:17",
-                "15:37", "15:57", "16:17", "16:37", "16:57", "17:17", "17:37", "17:57",
-                "18:17", "18:37", "18:57"
+                "08:17", "08:47", "09:17", "09:47", "10:17", "10:47",
+                "11:17", "11:47", "12:17", "12:47", "13:17", "13:47",
+                "14:17", "14:47", "15:17", "15:47", "16:17", "16:47",
+                "17:17", "17:47", "18:17", "18:47"
             ],
             holiday: [
                 // 日曜・祝日時刻 (江戸バス)
-                "08:17", "08:37", "08:57", "09:17", "09:37", "09:57", "10:17", "10:37",
-                "10:57", "11:17", "11:37", "11:57", "12:17", "12:37", "12:57", "13:17",
-                "13:37", "13:57", "14:17", "14:37", "14:57", "15:17", "15:37", "15:57",
-                "16:17", "16:37", "16:57", "17:17", "17:37", "17:57", "18:17", "18:37",
-                "18:57"
+                "08:17", "08:47", "09:17", "09:47", "10:17", "10:47",
+                "11:17", "11:47", "12:17", "12:47", "13:17", "13:47",
+                "14:17", "14:47", "15:17", "15:47", "16:17", "16:47",
+                "17:17", "17:47", "18:17", "18:47"
             ]
         },
         toBus: { // 都バスの時刻表
@@ -155,7 +147,7 @@ function timeStringToMinutes(timeString) {
         if (timeString.length === 4) {
             timeString = timeString.substring(0, 2) + ':' + timeString.substring(2, 4);
         } else if (timeString.length === 3) { // 例: 715 -> 07:15
-            timeString = '0' + timeString.substring(0, 1) + ':' + timeString.substring(1, 3);
+             timeString = '0' + timeString.substring(0, 1) + ':' + timeString.substring(1, 3);
         }
     }
     const [hours, minutes] = timeString.split(':').map(Number);
@@ -188,6 +180,13 @@ const searchButton = document.getElementById('searchButton');
 const busStopSelect = document.getElementById('busStopSelect');
 const minutesUntilNextBusDiv = document.getElementById('minutesUntilNextBus');
 const timetableDisplayDiv = document.getElementById('timetableDisplay');
+// 各曜日の各路線リスト要素を取得
+const weekdayTimetableListEdo = document.getElementById('weekdayTimetableEdo').querySelector('.timetable-list');
+const weekdayTimetableListTo = document.getElementById('weekdayTimetableTo').querySelector('.timetable-list');
+const saturdayTimetableListEdo = document.getElementById('saturdayTimetableEdo').querySelector('.timetable-list');
+const saturdayTimetableListTo = document.getElementById('saturdayTimetableTo').querySelector('.timetable-list');
+const holidayTimetableListEdo = document.getElementById('holidayTimetableEdo').querySelector('.timetable-list');
+const holidayTimetableListTo = document.getElementById('holidayTimetableTo').querySelector('.timetable-list');
 
 // --- 検索ボタンにイベントリスナーを設定 ---
 searchButton.addEventListener('click', searchNextBus);
@@ -195,11 +194,6 @@ searchButton.addEventListener('click', searchNextBus);
 // --- 現在の曜日を取得する関数 ---
 // 戻り値: 'weekday', 'saturday', 'holiday' のいずれか
 function getCurrentDayType() {
-    // ▼▼▼ 動作確認のための変更箇所 ▼▼▼
-    // 曜日を固定したい場合は、下の行のコメントを解除して 'weekday', 'saturday', 'holiday' のいずれかを指定してください。
-    // return 'weekday'; 
-    // ▲▲▲ ここまで ▲▲▲
-
     const today = new Date();
     const dayOfWeek = today.getDay(); // 0:日曜日, 1:月曜日, ..., 6:土曜日
 
@@ -208,7 +202,7 @@ function getCurrentDayType() {
     if (dayOfWeek === 6) {
         return 'saturday'; // 土曜日
     } else if (dayOfWeek === 0) {
-        // 簡単のため、日曜日は祝日扱いとします
+         // 簡単のため、日曜日は祝日扱いとします
         return 'holiday'; // 日曜日・祝日
     } else {
         return 'weekday'; // 平日 (月〜金)
@@ -218,79 +212,39 @@ function getCurrentDayType() {
 // --- 次のバスを検索して表示する関数 ---
 function searchNextBus() {
     const selectedBusStop = busStopSelect.value; // 選択されたバス停
-    
-    // ▼▼▼ 動作確認のための変更箇所 ▼▼▼
-    // 現在時刻を取得する代わりに、固定の時刻を設定します。
-    const now = new Date(); // ← 本来のコードはこちらです。確認が終わったら下の行を消して、こちらのコメントを解除してください。
-    //const now = new Date('2025-08-20T08:00:00'); // テスト用に時間を平日の午前8時に固定
-    // ▲▲▲ ここまで ▲▲▲
-
     const currentDayType = getCurrentDayType(); // 現在の曜日タイプ
 
     // 選択されたバス停の時刻表データを取得
     const busStopTimetable = calculatedTimetable[selectedBusStop];
     const rawBusStopTimetable = rawTimetable[selectedBusStop]; // 表示用
 
+    const now = new Date();
     // 現在時刻を「0時0分からの合計分数」に変換
     const currentMinutesTotal = now.getHours() * 60 + now.getMinutes();
 
-    // 江戸バスと都バス、それぞれの次の便を検索
+    let nextBusTime = null; // 次に早いバスの時刻（分単位）
+    let nextBusRoute = ''; // 次に早いバスの路線 ('江戸バス' または '都バス')
+
+    // 江戸バスの次の便を検索
     const nextEdoBusTime = busStopTimetable.edoBus ? findNextDeparture(busStopTimetable.edoBus[currentDayType], currentMinutesTotal) : null;
-    const nextToBusTime = busStopTimetable.toBus ? findNextDeparture(busStopTimetable.toBus[currentDayType], currentMinutesTotal) : null;
 
-    const upcomingBuses = [];
-    if (nextEdoBusTime !== null) {
-        upcomingBuses.push({ time: nextEdoBusTime, route: '江戸バス' });
-    }
-    if (nextToBusTime !== null) {
-        upcomingBuses.push({ time: nextToBusTime, route: '都バス' });
+    // 都バスの次の便を検索 (都バスがあるバス停のみ)
+    let nextToBusTime = null;
+    if (busStopTimetable.toBus) {
+        nextToBusTime = findNextDeparture(busStopTimetable.toBus[currentDayType], currentMinutesTotal);
     }
 
-    // 時間が早い順にソート
-    upcomingBuses.sort((a, b) => a.time - b.time);
+    // 次に早いバスを判定
+    if (nextEdoBusTime !== null && (nextToBusTime === null || nextEdoBusTime <= nextToBusTime)) {
+        nextBusTime = nextEdoBusTime;
+        nextBusRoute = '江戸バス';
+    } else if (nextToBusTime !== null) {
+        nextBusTime = nextToBusTime;
+        nextBusRoute = '都バス';
+    }
 
     // 結果表示エリアをクリア
     minutesUntilNextBusDiv.innerHTML = '';
-
-    // バス停名を表示
-    let resultsHTML = `<p class="bus-stop-name"><strong>${selectedBusStop}</strong></p>`;
-
-    if (upcomingBuses.length > 0) {
-        // 見つかったバスの情報をHTMLとして生成
-        upcomingBuses.forEach((bus, index) => {
-            const minutesUntilNextBus = bus.time - currentMinutesTotal;
-            let timeUntilNextBusText = '';
-            if (minutesUntilNextBus >= 60) {
-                const hours = Math.floor(minutesUntilNextBus / 60);
-                const minutes = minutesUntilNextBus % 60;
-                timeUntilNextBusText = `${hours}時間${minutes}分後`;
-            } else {
-                timeUntilNextBusText = `${minutesUntilNextBus}分後`;
-            }
-            const departureTimeText = `${Math.floor(bus.time / 60).toString().padStart(2, '0')}時${(bus.time % 60).toString().padStart(2, '0')}分`;
-            
-            // 最初に到着するバスかどうかでクラスを分ける
-            const busClass = (index === 0) ? 'primary' : 'secondary';
-            const label = (index === 0) ? '次に早いバス' : 'もう一方のバス';
-
-            resultsHTML += `
-                <div class="next-bus ${busClass}">
-                    <p>${label} (${bus.route}): <strong>約 ${timeUntilNextBusText}</strong></p>
-                    <p class="departure-time">出発予定: ${departureTimeText}</p>
-                </div>
-            `;
-        });
-        minutesUntilNextBusDiv.innerHTML = resultsHTML;
-
-    } else {
-        // 本日の運行が終了している場合
-        minutesUntilNextBusDiv.innerHTML = `
-            <p class="bus-stop-name"><strong>${selectedBusStop}</strong></p>
-            <p>本日のバスは終了しました。</p>
-        `;
-    }
-
-    // --- 時刻表表示ロジック ---
     // 全ての時刻表リストをクリア
     document.querySelectorAll('.timetable-list').forEach(ul => ul.innerHTML = '');
 
@@ -302,34 +256,70 @@ function searchNextBus() {
     document.getElementById(currentDaySectionId).classList.remove('hidden');
 
     // 該当曜日の江戸バス時刻表を表示
-    if (rawBusStopTimetable.edoBus && rawBusStopTimetable.edoBus[currentDayType]) {
-        const listElement = document.getElementById(`${currentDayType}TimetableEdo`).querySelector('.timetable-list');
-        displayTimetableList(rawBusStopTimetable.edoBus[currentDayType], listElement);
-        highlightNextBusInList(listElement, nextEdoBusTime); // ハイライト処理を追加
-        document.getElementById(`${currentDayType}TimetableEdo`).classList.remove('hidden');
+    if (rawBusStopTimetable.edoBus && rawBusStopTimetable.edoBus[currentDayType]) { // 該当曜日のデータが存在するか確認
+         displayTimetableList(rawBusStopTimetable.edoBus[currentDayType], document.getElementById(`${currentDayType}TimetableEdo`).querySelector('.timetable-list'));
+         document.getElementById(`${currentDayType}TimetableEdo`).classList.remove('hidden'); // 江戸バスのセクションを表示
     } else {
-        document.getElementById(`${currentDayType}TimetableEdo`).classList.add('hidden');
+         // データがない場合はセクションを非表示にする
+         document.getElementById(`${currentDayType}TimetableEdo`).classList.add('hidden');
     }
 
+
     // 該当曜日の都バス時刻表を表示 (都バスがあるバス停のみ)
-    if (rawBusStopTimetable.toBus && rawBusStopTimetable.toBus[currentDayType]) {
-        const listElement = document.getElementById(`${currentDayType}TimetableTo`).querySelector('.timetable-list');
-        displayTimetableList(rawBusStopTimetable.toBus[currentDayType], listElement);
-        highlightNextBusInList(listElement, nextToBusTime); // ハイライト処理を追加
-        document.getElementById(`${currentDayType}TimetableTo`).classList.remove('hidden');
+    if (rawBusStopTimetable.toBus && rawBusStopTimetable.toBus[currentDayType]) { // 該当曜日のデータが存在するか確認
+         document.getElementById(`${currentDayType}TimetableTo`).classList.remove('hidden'); // 都バスのセクションを表示
+         displayTimetableList(rawBusStopTimetable.toBus[currentDayType], document.getElementById(`${currentDayType}TimetableTo`).querySelector('.timetable-list'));
     } else {
-        document.getElementById(`${currentDayType}TimetableTo`).classList.add('hidden');
+         // 都バスがないバス停の場合はセクションを非表示にする
+         document.getElementById(`${currentDayType}TimetableTo`).classList.add('hidden');
+    }
+
+
+    // 次のバスが見つかった場合
+    if (nextBusTime !== null) {
+        // 次のバスまでの残り時間を分で計算
+        const minutesUntilNextBus = nextBusTime - currentMinutesTotal;
+
+        // 残り時間を時間と分に変換して表示形式を決定
+        let timeUntilNextBusText = '';
+        if (minutesUntilNextBus >= 60) {
+            const hours = Math.floor(minutesUntilNextBus / 60);
+            const minutes = minutesUntilNextBus % 60;
+            timeUntilNextBusText = `${hours}時間${minutes}分後`;
+        } else {
+            timeUntilNextBusText = `${minutesUntilNextBus}分後`;
+        }
+
+
+        // 「あと何分後」を表示
+        minutesUntilNextBusDiv.innerHTML = `
+            <p><strong>${selectedBusStop}</strong></p>
+            <p>次に早いバス: <strong>約 ${timeUntilNextBusText}</strong> です。</p>
+            <p>（${nextBusRoute}）</p>
+            <p>出発予定時刻: ${Math.floor(nextBusTime / 60).toString().padStart(2, '0')}時${(nextBusTime % 60).toString().padStart(2, '0')}分</p>
+        `;
+    } else {
+        // 本日の運行が終了している場合
+         minutesUntilNextBusDiv.innerHTML = `
+            <p><strong>${selectedBusStop}</strong></p>
+            <p>本日のバスは終了しました。</p>
+        `;
     }
 }
 
-
 // --- 現在時刻より後の最初の出発時刻を見つけるヘルパー関数 ---
+// timetable: 時刻の配列 (分単位)
+// currentMinutesTotal: 現在時刻 (分単位)
+// 戻り値: 次の出発時刻 (分単位) または null (本日の運行終了)
 function findNextDeparture(timetable, currentMinutesTotal) {
+    // 時刻表を順番に見ていく
     for (let i = 0; i < timetable.length; i++) {
+        // 現在時刻以上の時刻が見つかったら、それが次の出発時刻
         if (timetable[i] >= currentMinutesTotal) {
             return timetable[i];
         }
     }
+    // 時刻表の最後まで見ても見つからなかった場合、本日の運行は終了
     return null;
 }
 
@@ -342,34 +332,21 @@ function displayTimetableList(timetable, ulElement) {
     ulElement.innerHTML = timetable.map(time => `<li>${time}</li>`).join('');
 }
 
-// --- ★ 新しく追加したハイライト用の関数 ★ ---
-function highlightNextBusInList(listElement, nextBusTimeInMinutes) {
-    if (!listElement || nextBusTimeInMinutes === null) return;
-
-    // 分単位の時刻を "HH:MM" 形式の文字列に変換
-    const hours = Math.floor(nextBusTimeInMinutes / 60);
-    const minutes = nextBusTimeInMinutes % 60;
-    const timeString = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-
-    // 対応するリストアイテムを探してハイライト用クラスを付与
-    const listItems = listElement.querySelectorAll('li');
-    for (const item of listItems) {
-        if (item.textContent === timeString) {
-            item.classList.add('highlight-next-bus');
-            break; // 一致するものを見つけたらループを抜ける
-        }
-    }
-}
-
 
 // --- PWA (Progressive Web App) 関連の処理 ---
+// Service Workerを登録します。
+// Service Workerはバックグラウンドで動作し、オフラインでのキャッシュなどを担当します。
+// 注意: Service Workerは 'file://' から開いたローカルファイルでは動作しません。
+//       ウェブサーバー経由でアクセスする必要があります。
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
+        navigator.serviceWorker.register('/sw.js') // sw.js のパスを指定
             .then(registration => {
+                // 登録成功
                 console.log('Service Worker registered with scope:', registration.scope);
             })
             .catch(error => {
+                // 登録失敗
                 console.log('Service Worker registration failed:', error);
             });
     });
