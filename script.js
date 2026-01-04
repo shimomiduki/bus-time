@@ -179,18 +179,34 @@ searchButton.addEventListener('click', searchNextBus);
 
 // --- タブボタンにイベントリスナーを設定 ---
 document.querySelectorAll('.tab-button').forEach(button => {
-    button.addEventListener('click', function() {
+    button.addEventListener('click', function(e) {
+        e.preventDefault(); // デフォルト動作を防止
         const dayType = this.getAttribute('data-day-type');
+        console.log('タブがクリックされました:', dayType);
+        switchTimetableTab(dayType);
+    });
+
+    // スマホ対応：タッチイベントも追加
+    button.addEventListener('touchend', function(e) {
+        e.preventDefault(); // デフォルト動作を防止
+        const dayType = this.getAttribute('data-day-type');
+        console.log('タブがタッチされました:', dayType);
         switchTimetableTab(dayType);
     });
 });
+console.log('タブボタンの数:', document.querySelectorAll('.tab-button').length);
 
 // --- タブを切り替える関数 ---
 function switchTimetableTab(dayType) {
+    console.log('switchTimetableTab が呼ばれました。dayType:', dayType);
     const selectedBusStop = busStopSelect.value;
     const rawBusStopTimetable = rawTimetable[selectedBusStop];
+    console.log('選択されたバス停:', selectedBusStop);
 
-    if (!rawBusStopTimetable) return;
+    if (!rawBusStopTimetable) {
+        console.log('エラー: バス停のデータが見つかりません');
+        return;
+    }
 
     // すべてのタブからactiveクラスを削除
     document.querySelectorAll('.tab-button').forEach(btn => {
