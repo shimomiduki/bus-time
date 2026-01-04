@@ -383,7 +383,7 @@ function displayCombinedTimetable(busStopTimetable, dayType, containerElement) {
 
     sortedHours.forEach(hour => {
         html += '<tr>';
-        html += `<td class="hour-cell">■ ${hour}時台</td>`;
+        html += `<td class="hour-cell">${hour}時</td>`;
 
         // 江戸バス
         html += '<td class="time-cell">';
