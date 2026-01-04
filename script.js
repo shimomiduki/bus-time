@@ -181,16 +181,23 @@ searchButton.addEventListener('click', searchNextBus);
 document.querySelectorAll('.tab-button').forEach(button => {
     button.addEventListener('click', function() {
         const dayType = this.getAttribute('data-day-type');
+        console.log('タブがクリックされました:', dayType);
         switchTimetableTab(dayType);
     });
 });
+console.log('タブボタンの数:', document.querySelectorAll('.tab-button').length);
 
 // --- タブを切り替える関数 ---
 function switchTimetableTab(dayType) {
+    console.log('switchTimetableTab が呼ばれました。dayType:', dayType);
     const selectedBusStop = busStopSelect.value;
     const rawBusStopTimetable = rawTimetable[selectedBusStop];
+    console.log('選択されたバス停:', selectedBusStop);
 
-    if (!rawBusStopTimetable) return;
+    if (!rawBusStopTimetable) {
+        console.log('エラー: バス停のデータが見つかりません');
+        return;
+    }
 
     // すべてのタブからactiveクラスを削除
     document.querySelectorAll('.tab-button').forEach(btn => {
