@@ -223,46 +223,12 @@ function switchTimetableTab(dayType) {
 
     // 選択された曜日の時刻表セクションを表示
     const selectedSectionId = `${dayType}Timetable`;
-    document.getElementById(selectedSectionId).classList.remove('hidden');
+    const sectionElement = document.getElementById(selectedSectionId);
+    sectionElement.classList.remove('hidden');
 
-    // 全ての時刻表リストをクリア
-    document.querySelectorAll('.timetable-list').forEach(ul => ul.innerHTML = '');
-
-    // 江戸バス時刻表を表示
-    if (rawBusStopTimetable.edoBus && rawBusStopTimetable.edoBus[dayType]) {
-        const listElement = document.getElementById(`${dayType}TimetableEdo`).querySelector('.timetable-list');
-        displayTimetableList(rawBusStopTimetable.edoBus[dayType], listElement);
-        document.getElementById(`${dayType}TimetableEdo`).classList.remove('hidden');
-
-        // 現在の曜日と同じ場合のみハイライト
-        if (dayType === getCurrentDayType()) {
-            const now = new Date();
-            const currentMinutesTotal = now.getHours() * 60 + now.getMinutes();
-            const busStopTimetable = calculatedTimetable[selectedBusStop];
-            const nextEdoBusTime = busStopTimetable.edoBus ? findNextDeparture(busStopTimetable.edoBus[dayType], currentMinutesTotal) : null;
-            highlightNextBusInList(listElement, nextEdoBusTime);
-        }
-    } else {
-        document.getElementById(`${dayType}TimetableEdo`).classList.add('hidden');
-    }
-
-    // 都バス時刻表を表示
-    if (rawBusStopTimetable.toBus && rawBusStopTimetable.toBus[dayType]) {
-        const listElement = document.getElementById(`${dayType}TimetableTo`).querySelector('.timetable-list');
-        displayTimetableList(rawBusStopTimetable.toBus[dayType], listElement);
-        document.getElementById(`${dayType}TimetableTo`).classList.remove('hidden');
-
-        // 現在の曜日と同じ場合のみハイライト
-        if (dayType === getCurrentDayType()) {
-            const now = new Date();
-            const currentMinutesTotal = now.getHours() * 60 + now.getMinutes();
-            const busStopTimetable = calculatedTimetable[selectedBusStop];
-            const nextToBusTime = busStopTimetable.toBus ? findNextDeparture(busStopTimetable.toBus[dayType], currentMinutesTotal) : null;
-            highlightNextBusInList(listElement, nextToBusTime);
-        }
-    } else {
-        document.getElementById(`${dayType}TimetableTo`).classList.add('hidden');
-    }
+    // 江戸バスと都バスの時刻表を統合して表示
+    const containerElement = sectionElement.querySelector('.timetable-container');
+    displayCombinedTimetable(rawBusStopTimetable, dayType, containerElement);
 }
 
 // --- 現在の曜日を取得する関数 ---
@@ -379,66 +345,96 @@ function findNextDeparture(timetable, currentMinutesTotal) {
     return null;
 }
 
-// --- 時刻表リストを表示する関数（時間帯ごとにグループ化） ---
-function displayTimetableList(timetable, ulElement) {
-    if (!timetable || timetable.length === 0) {
-        ulElement.innerHTML = '<li>時刻表データがありません。</li>';
-        return;
-    }
-
-    // 現在時刻を取得（過去の時刻をグレーアウトするため）
+// --- 江戸バスと都バスの時刻表を統合して表示する関数 ---
+function displayCombinedTimetable(busStopTimetable, dayType, containerElement) {
     const now = new Date();
     const currentMinutesTotal = now.getHours() * 60 + now.getMinutes();
+    const selectedBusStop = busStopSelect.value;
+    const busStopCalcTimetable = calculatedTimetable[selectedBusStop];
 
-    // 時間帯ごとにグループ化
-    const groupedByHour = {};
-    timetable.forEach(timeString => {
-        const hour = timeString.split(':')[0];
-        if (!groupedByHour[hour]) {
-            groupedByHour[hour] = [];
-        }
-        groupedByHour[hour].push(timeString);
-    });
+    // 江戸バスと都バスの時刻表を取得
+    const edoBusTimes = busStopTimetable.edoBus ? busStopTimetable.edoBus[dayType] : [];
+    const toBusTimes = busStopTimetable.toBus ? busStopTimetable.toBus[dayType] : [];
+
+    // 両方の時刻表を時間帯ごとにグループ化
+    const edoBusGrouped = groupByHour(edoBusTimes);
+    const toBusGrouped = groupByHour(toBusTimes);
+
+    // すべての時間帯を取得（江戸バスと都バス両方）
+    const allHours = new Set([...Object.keys(edoBusGrouped), ...Object.keys(toBusGrouped)]);
+    const sortedHours = Array.from(allHours).sort((a, b) => parseInt(a) - parseInt(b));
+
+    // 次のバスを計算（現在の曜日の場合のみ）
+    let nextEdoBusTime = null;
+    let nextToBusTime = null;
+    if (dayType === getCurrentDayType()) {
+        nextEdoBusTime = busStopCalcTimetable.edoBus ? findNextDeparture(busStopCalcTimetable.edoBus[dayType], currentMinutesTotal) : null;
+        nextToBusTime = busStopCalcTimetable.toBus ? findNextDeparture(busStopCalcTimetable.toBus[dayType], currentMinutesTotal) : null;
+    }
 
     // HTMLを生成
-    let html = '';
-    Object.keys(groupedByHour).sort().forEach(hour => {
-        html += `<div class="hour-group">`;
-        html += `<div class="hour-label">${hour}時台</div>`;
-        html += `<div class="minutes-list">`;
+    let html = '<table class="combined-timetable">';
+    html += '<thead><tr>';
+    html += '<th class="hour-column">時間帯</th>';
+    html += '<th class="edo-column">江戸バス</th>';
+    html += '<th class="to-column">都バス</th>';
+    html += '</tr></thead>';
+    html += '<tbody>';
 
-        groupedByHour[hour].forEach(timeString => {
-            const [h, m] = timeString.split(':').map(Number);
-            const timeInMinutes = h * 60 + m;
-            const isPast = timeInMinutes < currentMinutesTotal;
-            const pastClass = isPast ? 'past-time' : '';
+    sortedHours.forEach(hour => {
+        html += '<tr>';
+        html += `<td class="hour-cell">■ ${hour}時台</td>`;
 
-            html += `<span class="time-item ${pastClass}">${m.toString().padStart(2, '0')}分</span>`;
-        });
+        // 江戸バス
+        html += '<td class="time-cell">';
+        if (edoBusGrouped[hour]) {
+            edoBusGrouped[hour].forEach(timeString => {
+                const [h, m] = timeString.split(':').map(Number);
+                const timeInMinutes = h * 60 + m;
+                const isPast = dayType === getCurrentDayType() && timeInMinutes < currentMinutesTotal;
+                const isNext = nextEdoBusTime !== null && timeInMinutes === nextEdoBusTime;
+                const classes = `time-item ${isPast ? 'past-time' : ''} ${isNext ? 'highlight-next-bus' : ''}`;
+                html += `<span class="${classes}">${m.toString().padStart(2, '0')}分</span>`;
+            });
+        } else {
+            html += '<span class="no-service">－</span>';
+        }
+        html += '</td>';
 
-        html += `</div></div>`;
+        // 都バス
+        html += '<td class="time-cell">';
+        if (toBusGrouped[hour]) {
+            toBusGrouped[hour].forEach(timeString => {
+                const [h, m] = timeString.split(':').map(Number);
+                const timeInMinutes = h * 60 + m;
+                const isPast = dayType === getCurrentDayType() && timeInMinutes < currentMinutesTotal;
+                const isNext = nextToBusTime !== null && timeInMinutes === nextToBusTime;
+                const classes = `time-item ${isPast ? 'past-time' : ''} ${isNext ? 'highlight-next-bus' : ''}`;
+                html += `<span class="${classes}">${m.toString().padStart(2, '0')}分</span>`;
+            });
+        } else {
+            html += '<span class="no-service">－</span>';
+        }
+        html += '</td>';
+
+        html += '</tr>';
     });
 
-    ulElement.innerHTML = html;
+    html += '</tbody></table>';
+    containerElement.innerHTML = html;
 }
 
-// --- ★ 新しく追加したハイライト用の関数 ★ ---
-function highlightNextBusInList(listElement, nextBusTimeInMinutes) {
-    if (!listElement || nextBusTimeInMinutes === null) return;
-
-    // 分単位の時刻を "HH:MM" 形式の文字列に変換
-    const hours = Math.floor(nextBusTimeInMinutes / 60);
-    const minutes = nextBusTimeInMinutes % 60;
-    const minutesString = `${minutes.toString().padStart(2, '0')}分`;
-
-    // 対応する時刻アイテムを探してハイライト用クラスを付与
-    const timeItems = listElement.querySelectorAll('.time-item');
-    for (const item of timeItems) {
-        if (item.textContent === minutesString) {
-            item.classList.add('highlight-next-bus');
-            break; // 一致するものを見つけたらループを抜ける
+// --- 時刻表を時間帯ごとにグループ化するヘルパー関数 ---
+function groupByHour(timetable) {
+    const grouped = {};
+    timetable.forEach(timeString => {
+        const hour = timeString.split(':')[0];
+        if (!grouped[hour]) {
+            grouped[hour] = [];
         }
-    }
+        grouped[hour].push(timeString);
+    });
+    return grouped;
 }
 
 
