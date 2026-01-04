@@ -379,13 +379,47 @@ function findNextDeparture(timetable, currentMinutesTotal) {
     return null;
 }
 
-// --- 時刻表リストを表示する関数 ---
+// --- 時刻表リストを表示する関数（時間帯ごとにグループ化） ---
 function displayTimetableList(timetable, ulElement) {
     if (!timetable || timetable.length === 0) {
         ulElement.innerHTML = '<li>時刻表データがありません。</li>';
         return;
     }
-    ulElement.innerHTML = timetable.map(time => `<li>${time}</li>`).join('');
+
+    // 現在時刻を取得（過去の時刻をグレーアウトするため）
+    const now = new Date();
+    const currentMinutesTotal = now.getHours() * 60 + now.getMinutes();
+
+    // 時間帯ごとにグループ化
+    const groupedByHour = {};
+    timetable.forEach(timeString => {
+        const hour = timeString.split(':')[0];
+        if (!groupedByHour[hour]) {
+            groupedByHour[hour] = [];
+        }
+        groupedByHour[hour].push(timeString);
+    });
+
+    // HTMLを生成
+    let html = '';
+    Object.keys(groupedByHour).sort().forEach(hour => {
+        html += `<div class="hour-group">`;
+        html += `<div class="hour-label">${hour}時台</div>`;
+        html += `<div class="minutes-list">`;
+
+        groupedByHour[hour].forEach(timeString => {
+            const [h, m] = timeString.split(':').map(Number);
+            const timeInMinutes = h * 60 + m;
+            const isPast = timeInMinutes < currentMinutesTotal;
+            const pastClass = isPast ? 'past-time' : '';
+
+            html += `<span class="time-item ${pastClass}">${m.toString().padStart(2, '0')}分</span>`;
+        });
+
+        html += `</div></div>`;
+    });
+
+    ulElement.innerHTML = html;
 }
 
 // --- ★ 新しく追加したハイライト用の関数 ★ ---
@@ -395,12 +429,12 @@ function highlightNextBusInList(listElement, nextBusTimeInMinutes) {
     // 分単位の時刻を "HH:MM" 形式の文字列に変換
     const hours = Math.floor(nextBusTimeInMinutes / 60);
     const minutes = nextBusTimeInMinutes % 60;
-    const timeString = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+    const minutesString = `${minutes.toString().padStart(2, '0')}分`;
 
-    // 対応するリストアイテムを探してハイライト用クラスを付与
-    const listItems = listElement.querySelectorAll('li');
-    for (const item of listItems) {
-        if (item.textContent === timeString) {
+    // 対応する時刻アイテムを探してハイライト用クラスを付与
+    const timeItems = listElement.querySelectorAll('.time-item');
+    for (const item of timeItems) {
+        if (item.textContent === minutesString) {
             item.classList.add('highlight-next-bus');
             break; // 一致するものを見つけたらループを抜ける
         }
@@ -420,3 +454,9 @@ if ('serviceWorker' in navigator) {
             });
     });
 }
+
+// --- ページ読み込み時に聖路加国際病院の情報を自動表示 ---
+window.addEventListener('load', () => {
+    // 聖路加国際病院がデフォルトで選択されているので、そのまま検索を実行
+    searchNextBus();
+});

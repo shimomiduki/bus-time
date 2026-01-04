@@ -227,27 +227,54 @@ button:hover {
     list-style: none;
     padding: 0;
     margin: 0;
-    display: flex; /* 横並びにする */
-    flex-wrap: wrap; /* 折り返す */
-    gap: 10px; /* 要素間の隙間 */
 }
 
-.timetable-list li {
-    background-color: #ffffff; /* リストアイテムの背景は白 */
-    border: 1px solid #b0c0cd; /* ボーダー色を #D6DCE4 より少し濃い色に */
-    border-radius: 3px;
-    padding: 5px 10px;
-    font-size: 0.9em;
-    transition: all 0.3s ease; /* アニメーションを滑らかに */
+/* 時間帯グループ */
+.hour-group {
+    margin-bottom: 15px;
 }
 
-/* ★ 新しく追加したハイライト用のスタイル ★ */
-.timetable-list li.highlight-next-bus {
-    background-color: #5a7a8a; /* ボタンと同じテーマカラー */
-    color: white; /* テキストは白 */
+.hour-label {
     font-weight: bold;
-    border-color: #4a6a7a; /* 少し濃いボーダー */
-    transform: scale(1.05); /* 少しだけ大きくして目立たせる */
+    color: #4a6a7a;
+    font-size: 1em;
+    margin-bottom: 8px;
+    padding-bottom: 3px;
+    border-bottom: 1px solid #c8d0d6;
+}
+
+.minutes-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.time-item {
+    background-color: #ffffff;
+    border: 1px solid #b0c0cd;
+    border-radius: 3px;
+    padding: 5px 12px;
+    font-size: 0.9em;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+/* 過去の時刻をグレーアウト */
+.time-item.past-time {
+    background-color: #f5f5f5;
+    color: #999;
+    border-color: #ddd;
+    opacity: 0.6;
+}
+
+/* ★ ハイライト用のスタイル ★ */
+.time-item.highlight-next-bus {
+    background-color: #5a7a8a;
+    color: white;
+    font-weight: bold;
+    border-color: #4a6a7a;
+    transform: scale(1.1);
+    box-shadow: 0 2px 8px rgba(90, 122, 138, 0.3);
 }
 
 
@@ -275,9 +302,13 @@ button:hover {
         font-size: 1em;
     }
 
-    .timetable-list li {
+    .time-item {
         font-size: 0.8em;
         padding: 4px 8px;
+    }
+
+    .hour-label {
+        font-size: 0.9em;
     }
 
     /* タブボタンのレスポンシブ対応 */
