@@ -177,6 +177,78 @@ const timetableDisplayDiv = document.getElementById('timetableDisplay');
 // --- 検索ボタンにイベントリスナーを設定 ---
 searchButton.addEventListener('click', searchNextBus);
 
+// --- タブボタンにイベントリスナーを設定 ---
+document.querySelectorAll('.tab-button').forEach(button => {
+    button.addEventListener('click', function() {
+        const dayType = this.getAttribute('data-day-type');
+        switchTimetableTab(dayType);
+    });
+});
+
+// --- タブを切り替える関数 ---
+function switchTimetableTab(dayType) {
+    const selectedBusStop = busStopSelect.value;
+    const rawBusStopTimetable = rawTimetable[selectedBusStop];
+
+    if (!rawBusStopTimetable) return;
+
+    // すべてのタブからactiveクラスを削除
+    document.querySelectorAll('.tab-button').forEach(btn => {
+        btn.classList.remove('active');
+    });
+
+    // クリックされたタブにactiveクラスを追加
+    document.querySelector(`.tab-button[data-day-type="${dayType}"]`).classList.add('active');
+
+    // すべての時刻表セクションを非表示
+    document.querySelectorAll('.timetable-section').forEach(section => {
+        section.classList.add('hidden');
+    });
+
+    // 選択された曜日の時刻表セクションを表示
+    const selectedSectionId = `${dayType}Timetable`;
+    document.getElementById(selectedSectionId).classList.remove('hidden');
+
+    // 全ての時刻表リストをクリア
+    document.querySelectorAll('.timetable-list').forEach(ul => ul.innerHTML = '');
+
+    // 江戸バス時刻表を表示
+    if (rawBusStopTimetable.edoBus && rawBusStopTimetable.edoBus[dayType]) {
+        const listElement = document.getElementById(`${dayType}TimetableEdo`).querySelector('.timetable-list');
+        displayTimetableList(rawBusStopTimetable.edoBus[dayType], listElement);
+        document.getElementById(`${dayType}TimetableEdo`).classList.remove('hidden');
+
+        // 現在の曜日と同じ場合のみハイライト
+        if (dayType === getCurrentDayType()) {
+            const now = new Date();
+            const currentMinutesTotal = now.getHours() * 60 + now.getMinutes();
+            const busStopTimetable = calculatedTimetable[selectedBusStop];
+            const nextEdoBusTime = busStopTimetable.edoBus ? findNextDeparture(busStopTimetable.edoBus[dayType], currentMinutesTotal) : null;
+            highlightNextBusInList(listElement, nextEdoBusTime);
+        }
+    } else {
+        document.getElementById(`${dayType}TimetableEdo`).classList.add('hidden');
+    }
+
+    // 都バス時刻表を表示
+    if (rawBusStopTimetable.toBus && rawBusStopTimetable.toBus[dayType]) {
+        const listElement = document.getElementById(`${dayType}TimetableTo`).querySelector('.timetable-list');
+        displayTimetableList(rawBusStopTimetable.toBus[dayType], listElement);
+        document.getElementById(`${dayType}TimetableTo`).classList.remove('hidden');
+
+        // 現在の曜日と同じ場合のみハイライト
+        if (dayType === getCurrentDayType()) {
+            const now = new Date();
+            const currentMinutesTotal = now.getHours() * 60 + now.getMinutes();
+            const busStopTimetable = calculatedTimetable[selectedBusStop];
+            const nextToBusTime = busStopTimetable.toBus ? findNextDeparture(busStopTimetable.toBus[dayType], currentMinutesTotal) : null;
+            highlightNextBusInList(listElement, nextToBusTime);
+        }
+    } else {
+        document.getElementById(`${dayType}TimetableTo`).classList.add('hidden');
+    }
+}
+
 // --- 現在の曜日を取得する関数 ---
 // 戻り値: 'weekday', 'saturday', 'holiday' のいずれか
 function getCurrentDayType() {
@@ -276,35 +348,8 @@ function searchNextBus() {
     }
 
     // --- 時刻表表示ロジック ---
-    // 全ての時刻表リストをクリア
-    document.querySelectorAll('.timetable-list').forEach(ul => ul.innerHTML = '');
-
-    // 曜日ごとの時刻表セクションを全て非表示にする
-    document.querySelectorAll('.timetable-section').forEach(section => section.classList.add('hidden'));
-
-    // 該当する曜日の時刻表セクションを表示する
-    const currentDaySectionId = `${currentDayType}Timetable`;
-    document.getElementById(currentDaySectionId).classList.remove('hidden');
-
-    // 該当曜日の江戸バス時刻表を表示
-    if (rawBusStopTimetable.edoBus && rawBusStopTimetable.edoBus[currentDayType]) {
-        const listElement = document.getElementById(`${currentDayType}TimetableEdo`).querySelector('.timetable-list');
-        displayTimetableList(rawBusStopTimetable.edoBus[currentDayType], listElement);
-        highlightNextBusInList(listElement, nextEdoBusTime); // ハイライト処理を追加
-        document.getElementById(`${currentDayType}TimetableEdo`).classList.remove('hidden');
-    } else {
-        document.getElementById(`${currentDayType}TimetableEdo`).classList.add('hidden');
-    }
-
-    // 該当曜日の都バス時刻表を表示 (都バスがあるバス停のみ)
-    if (rawBusStopTimetable.toBus && rawBusStopTimetable.toBus[currentDayType]) {
-        const listElement = document.getElementById(`${currentDayType}TimetableTo`).querySelector('.timetable-list');
-        displayTimetableList(rawBusStopTimetable.toBus[currentDayType], listElement);
-        highlightNextBusInList(listElement, nextToBusTime); // ハイライト処理を追加
-        document.getElementById(`${currentDayType}TimetableTo`).classList.remove('hidden');
-    } else {
-        document.getElementById(`${currentDayType}TimetableTo`).classList.add('hidden');
-    }
+    // タブ切り替え機能を使って時刻表を表示（デフォルトは当日の曜日）
+    switchTimetableTab(currentDayType);
 }
 
 
