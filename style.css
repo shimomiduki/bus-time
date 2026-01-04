@@ -223,40 +223,68 @@ button:hover {
 }
 
 
-.timetable-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+/* 統合時刻表テーブル */
+.combined-timetable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9em;
 }
 
-/* 時間帯グループ */
-.hour-group {
-    margin-bottom: 15px;
+.combined-timetable thead th {
+    background-color: #5a7a8a;
+    color: white;
+    padding: 10px 8px;
+    text-align: left;
+    font-weight: bold;
+    border-bottom: 2px solid #4a6a7a;
 }
 
-.hour-label {
+.combined-timetable thead th.hour-column {
+    width: 85px;
+}
+
+.combined-timetable thead th.edo-column,
+.combined-timetable thead th.to-column {
+    width: auto;
+}
+
+.combined-timetable tbody tr {
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.combined-timetable tbody tr:last-child {
+    border-bottom: none;
+}
+
+.combined-timetable tbody tr:hover {
+    background-color: #f9fafb;
+}
+
+.combined-timetable td {
+    padding: 10px 8px;
+    vertical-align: top;
+}
+
+.combined-timetable td.hour-cell {
     font-weight: bold;
     color: #4a6a7a;
-    font-size: 1em;
-    margin-bottom: 8px;
-    padding-bottom: 3px;
-    border-bottom: 1px solid #c8d0d6;
+    white-space: nowrap;
 }
 
-.minutes-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
+.combined-timetable td.time-cell {
+    line-height: 1.8;
 }
 
 .time-item {
     background-color: #ffffff;
     border: 1px solid #b0c0cd;
     border-radius: 3px;
-    padding: 5px 12px;
+    padding: 4px 10px;
     font-size: 0.9em;
     transition: all 0.3s ease;
     display: inline-block;
+    margin-right: 6px;
+    margin-bottom: 4px;
 }
 
 /* 過去の時刻をグレーアウト */
@@ -267,14 +295,20 @@ button:hover {
     opacity: 0.6;
 }
 
-/* ★ ハイライト用のスタイル ★ */
+/* ハイライト用のスタイル */
 .time-item.highlight-next-bus {
     background-color: #5a7a8a;
     color: white;
     font-weight: bold;
     border-color: #4a6a7a;
-    transform: scale(1.1);
+    transform: scale(1.05);
     box-shadow: 0 2px 8px rgba(90, 122, 138, 0.3);
+}
+
+/* 運行なしの表示 */
+.no-service {
+    color: #999;
+    font-style: italic;
 }
 
 
@@ -302,15 +336,6 @@ button:hover {
         font-size: 1em;
     }
 
-    .time-item {
-        font-size: 0.8em;
-        padding: 4px 8px;
-    }
-
-    .hour-label {
-        font-size: 0.9em;
-    }
-
     /* タブボタンのレスポンシブ対応 */
     .timetable-tabs {
         gap: 5px;
@@ -319,5 +344,30 @@ button:hover {
     .tab-button {
         padding: 8px 12px;
         font-size: 0.85em;
+    }
+
+    /* テーブルのレスポンシブ対応 */
+    .combined-timetable {
+        font-size: 0.8em;
+    }
+
+    .combined-timetable thead th {
+        padding: 8px 5px;
+        font-size: 0.85em;
+    }
+
+    .combined-timetable thead th.hour-column {
+        width: 65px;
+    }
+
+    .combined-timetable td {
+        padding: 8px 5px;
+    }
+
+    .time-item {
+        font-size: 0.8em;
+        padding: 3px 7px;
+        margin-right: 4px;
+        margin-bottom: 3px;
     }
 }
