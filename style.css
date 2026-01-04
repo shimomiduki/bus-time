@@ -240,7 +240,7 @@ button:hover {
 }
 
 .combined-timetable thead th.hour-column {
-    width: 85px;
+    width: 50px;
 }
 
 .combined-timetable thead th.edo-column,
@@ -269,6 +269,7 @@ button:hover {
     font-weight: bold;
     color: #4a6a7a;
     white-space: nowrap;
+    padding-right: 5px;
 }
 
 .combined-timetable td.time-cell {
@@ -357,7 +358,7 @@ button:hover {
     }
 
     .combined-timetable thead th.hour-column {
-        width: 65px;
+        width: 40px;
     }
 
     .combined-timetable td {
